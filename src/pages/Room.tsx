@@ -11,13 +11,15 @@ import { useAuth } from "../contexts/AuthContext";
 import { database } from "../services/firebase";
 import { Question } from "../components/Question";
 import { useRoom } from "../hooks/useRoom";
+import { useHistory } from "react-router-dom";
 
 type RoomParams = {
   id: string;
 };
 
 export function Room() {
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
+  const history = useHistory();
   const params = useParams<RoomParams>();
 
   const [newQuestion, setNewQuestion] = useState("");
@@ -46,6 +48,10 @@ export function Room() {
     await database.ref(`rooms/${params.id}/questions`).push(question);
 
     setNewQuestion("");
+  }
+
+  async function handleLogin() {
+    await signInWithGoogle();
   }
 
   async function handleLikeQuestion(
@@ -95,7 +101,9 @@ export function Room() {
               </div>
             ) : (
               <span>
-                Para enviar uma pergunta, <button>faça seu login</button>.
+                {/* Implementar funcionamento do login */}
+                Para enviar uma pergunta,{" "}
+                <button onClick={signInWithGoogle}> faça seu login</button>.
               </span>
             )}
             <Button type="submit">Enviar pergunta</Button>
