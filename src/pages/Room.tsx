@@ -19,7 +19,6 @@ type RoomParams = {
 
 export function Room() {
   const { user, signInWithGoogle } = useAuth();
-  const history = useHistory();
   const params = useParams<RoomParams>();
 
   const [newQuestion, setNewQuestion] = useState("");
@@ -48,10 +47,6 @@ export function Room() {
     await database.ref(`rooms/${params.id}/questions`).push(question);
 
     setNewQuestion("");
-  }
-
-  async function handleLogin() {
-    await signInWithGoogle();
   }
 
   async function handleLikeQuestion(
