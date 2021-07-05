@@ -11,7 +11,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { database } from "../services/firebase";
 import { Question } from "../components/Question";
 import { useRoom } from "../hooks/useRoom";
-import { useHistory } from "react-router-dom";
 
 type RoomParams = {
   id: string;
