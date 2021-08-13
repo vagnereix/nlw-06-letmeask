@@ -12,7 +12,7 @@ import "../styles/room.scss";
 import { Question } from "../components/Question";
 import { useRoom } from "../hooks/useRoom";
 import { database } from "../services/firebase";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 type RoomParams = {
   id: string;
@@ -56,7 +56,9 @@ export function AdminRoom() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+          <Link to="/">
+            <img src={logoImg} alt="Letmeask" />
+          </Link>
           <div>
             <RoomCode code={params.id} />
             <Button onClick={handleCloseRoom} isOutlined>

@@ -6,11 +6,12 @@ import RoomCode from "../components/RoomCode";
 import logoImg from "../assets/images/logo.svg";
 
 import "../styles/room.scss";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { database } from "../services/firebase";
 import { Question } from "../components/Question";
 import { useRoom } from "../hooks/useRoom";
+import { Link, useHistory } from "react-router-dom";
 
 type RoomParams = {
   id: string;
@@ -19,6 +20,7 @@ type RoomParams = {
 export function Room() {
   const { user, signInWithGoogle } = useAuth();
   const params = useParams<RoomParams>();
+  const history = useHistory();
 
   const [newQuestion, setNewQuestion] = useState("");
 
@@ -48,6 +50,19 @@ export function Room() {
     setNewQuestion("");
   }
 
+  async function handleCheckIfRoomIsClosed() {
+    const roomRef = await database.ref(`rooms/${params.id}`).get();
+
+    if (roomRef.val().closedAt) {
+      alert("Room already closed.");
+      history.push("/");
+    }
+  }
+
+  useEffect(() => {
+    handleCheckIfRoomIsClosed();
+  }, []);
+
   async function handleLikeQuestion(
     questionId: string,
     likeId: string | undefined
@@ -69,7 +84,9 @@ export function Room() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logoImg} alt="Letmeask" />
+          <Link to="/">
+            <img src={logoImg} alt="Letmeask" />
+          </Link>
           <RoomCode code={params.id} />
         </div>
       </header>
